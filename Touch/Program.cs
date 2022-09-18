@@ -5,43 +5,40 @@ namespace Touch;
 public static class Program
 {
     private static readonly string BinaryName = AppDomain.CurrentDomain.FriendlyName;
-    private static string _filePath = string.Empty;
     private static readonly string? AssemblyName = GetExecutingAssembly().GetName().Name;
     private static readonly string? AssemblyVersion = GetExecutingAssembly().GetName().Version?.ToString();
-
-    private static readonly Dictionary<string, Func<Task>> Parameters = new()
-    {
-        {"-o", OpenFile}
-    };
+    private static AppOptions AppOptions { get; set; } = new();
 
     private static void Main(string[] args)
     {
-        var destination = args.FirstOrDefault(x => !x.StartsWith("-"));
-        if (string.IsNullOrEmpty(destination))
+        AppOptions = CliParser.Parse(args);
+        if (string.IsNullOrEmpty(AppOptions.FileName))
         {
             ShowHelp();
             Environment.Exit(0);
         }
 
-        _filePath = destination;
-        if (!File.Exists(_filePath))
-        {
-            CreateFile();
-            Environment.Exit(0);
-        }
+        TouchFile();
 
-        UpdateTimes();
-        ParseSwitches(args.Where(x => x.StartsWith("-")));
+        if (AppOptions.OpenFile)
+        {
+            OpenFile();
+        }
 
         Environment.Exit(0);
     }
 
     private static void UpdateTimes()
     {
+        if (!AppOptions.ChangeAccessTime || string.IsNullOrEmpty(AppOptions.FileName) || !File.Exists(AppOptions.FileName))
+        {
+            return;
+        }
+
         try
         {
-            File.SetLastAccessTime(_filePath, DateTime.Now);
-            File.SetLastWriteTime(_filePath, DateTime.Now);
+            File.SetLastAccessTime(AppOptions.FileName, DateTime.Now);
+            File.SetLastWriteTime(AppOptions.FileName, DateTime.Now);
         }
         catch (Exception e)
         {
@@ -50,11 +47,21 @@ public static class Program
         }
     }
 
-    private static void CreateFile()
+    private static void TouchFile()
     {
+        if (string.IsNullOrEmpty(AppOptions.FileName))
+        {
+            return;
+        }
+
         try
         {
-            File.Create(_filePath);
+            if (!File.Exists(AppOptions.FileName) && AppOptions.CreateFile)
+            {
+                File.Create(AppOptions.FileName);
+            }
+
+            UpdateTimes();
         }
         catch (Exception e)
         {
@@ -66,42 +73,29 @@ public static class Program
     private static void ShowHelp()
     {
         Console.WriteLine("{0} {1}\n", AssemblyName, AssemblyVersion);
-        Console.WriteLine("Usage: {0} path", BinaryName);
-        Console.WriteLine("{0} textfile.txt", BinaryName);
-        Console.WriteLine("{0} \"C:\\Path To\\File\\filename.ext\"", BinaryName);
+        Console.WriteLine("Usage: {0} <file> <flags>", BinaryName);
+        Console.WriteLine("Flags:");
+        Console.WriteLine("-o       Open file after creating/updating with default editor");
+        Console.WriteLine("-a       Change access/write time on file when file already exists");
+        Console.WriteLine("-c       Do not create any files");
     }
 
-    private static void ParseSwitches(IEnumerable<string> switches)
+    private static void OpenFile()
     {
-        foreach (var arg in switches)
+        if (!File.Exists(AppOptions.FileName))
         {
-            var argument = Parameters.Where(x => x.Key == arg).ToList();
-            if (!argument.Any())
-            {
-                Console.WriteLine($"Unknown switch: {arg}");
-                continue;
-            }
-
-            try
-            {
-                argument.FirstOrDefault().Value.Invoke();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
-        }
-    }
-
-    private static Task OpenFile()
-    {
-        if (!File.Exists(_filePath))
-        {
-            Console.WriteLine($"{_filePath} does not exist");
+            Console.WriteLine($"{AppOptions.FileName} does not exist");
+            return;
         }
 
-        ShellHelper.OpenFile(_filePath);
-        return Task.CompletedTask;
+        try
+        {
+            ShellHelper.OpenFile(AppOptions.FileName);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }

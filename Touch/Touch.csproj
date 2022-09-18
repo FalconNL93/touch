@@ -8,6 +8,12 @@
         <Company>FalconNL93</Company>
         <AssemblyVersion>1.0.0</AssemblyVersion>
         <FileVersion>1.0.0</FileVersion>
+        <PackageProjectUrl>https://github.com/FalconNL93/touch</PackageProjectUrl>
+        <AssemblyName>touch</AssemblyName>
+        <Authors>FalconNL93</Authors>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <DebugType>none</DebugType>
+    </PropertyGroup>
 </Project>

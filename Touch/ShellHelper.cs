@@ -2,9 +2,9 @@
 
 namespace Touch;
 
-public class ShellHelper
+public static class ShellHelper
 {
-    public static void OpenFile(string path)
+    public static void OpenFile(string? path)
     {
         using var process = new Process();
         process.StartInfo.FileName = "explorer";
