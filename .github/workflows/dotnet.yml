@@ -22,7 +22,9 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
     - name: Publish
-      run: dotnet publish -c Release -o output
+      run: |
+        dotnet publish -c Release -o output -r win-x64 -p:SelfContained=false -p:PlatformTarget=x64
+        dotnet publish -c Release -o output -r win-x86 -p:SelfContained=false -p:PlatformTarget=x86
       
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v3.1.0

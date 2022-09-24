@@ -11,9 +11,16 @@
         <PackageProjectUrl>https://github.com/FalconNL93/touch</PackageProjectUrl>
         <AssemblyName>touch</AssemblyName>
         <Authors>FalconNL93</Authors>
-    </PropertyGroup>
-
+        <Configurations>Debug;Release</Configurations>
+        <Platforms>x64;x86</Platforms>
+    </PropertyGroup>    
+    
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+        <AssemblyName Condition="'$(PlatformTarget)' == 'x64'">touch64</AssemblyName>
+        <AssemblyName Condition="'$(PlatformTarget)' == 'x86'">touch32</AssemblyName>
+        
         <DebugType>none</DebugType>
+        <PublishSingleFile>true</PublishSingleFile>
+        <OutDir>output</OutDir>
     </PropertyGroup>
 </Project>
