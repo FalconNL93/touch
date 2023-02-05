@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <Company>FalconNL93</Company>
@@ -13,12 +13,13 @@
         <Authors>FalconNL93</Authors>
         <Configurations>Debug;Release</Configurations>
         <Platforms>x64;x86</Platforms>
-    </PropertyGroup>    
-    
+        <LangVersion>11</LangVersion>
+    </PropertyGroup>
+
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
         <AssemblyName Condition="'$(PlatformTarget)' == 'x64'">touch64</AssemblyName>
         <AssemblyName Condition="'$(PlatformTarget)' == 'x86'">touch32</AssemblyName>
-        
+
         <DebugType>none</DebugType>
         <PublishSingleFile>true</PublishSingleFile>
         <OutDir>output</OutDir>
