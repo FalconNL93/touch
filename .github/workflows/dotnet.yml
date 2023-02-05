@@ -13,7 +13,7 @@ jobs:
       matrix:
         configuration: [ Release ]
         platform: [ x64, x86 ]
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     env:
       Platform: ${{ matrix.platform }}
 
@@ -30,13 +30,13 @@ jobs:
 
       - name: Publish
         run: |
-          dotnet publish `
-          -c Release `
-          -o "${{ github.workspace }}\app\release\${{ env.Platform }}" `
-          -r win-${{ env.Platform }} `
-          -p:PlatformTarget=${{ env.Platform }} `
-          -p:Version="${{ env.AppVersion }}" `
-          -p:FileVersion="${{ env.AppVersion }}" `
+          dotnet publish \
+          -c Release \
+          -o "${{ github.workspace }}\app\release\${{ env.Platform }}" \
+          -r win-${{ env.Platform }} \
+          -p:PlatformTarget=${{ env.Platform }} \
+          -p:Version="${{ env.AppVersion }}" \
+          -p:FileVersion="${{ env.AppVersion }}" \
           -p:AssemblyVersion="${{ env.AppVersion }}"
 
       - name: Upload binary artifacts
