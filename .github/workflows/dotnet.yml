@@ -30,7 +30,8 @@ jobs:
           dotnet publish `
           -c Release `
           -o "${{ github.workspace }}\app\release\${{ env.Platform }}" `
-          -r win-${{ env.Platform }}
+          -r win-${{ env.Platform }} `
+          -p:PlatformTarget=${{ env.Platform }}
 
       - name: Upload binary artifacts
         uses: actions/upload-artifact@v3
