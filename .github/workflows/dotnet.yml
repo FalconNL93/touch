@@ -4,6 +4,9 @@ on:
   push:
     branches: [ "master" ]
 
+env:
+  AppVersion: '0.1.${{ github.run_number }}.0'
+
 jobs:
   build:
     strategy:
@@ -31,14 +34,16 @@ jobs:
           -c Release `
           -o "${{ github.workspace }}\app\release\${{ env.Platform }}" `
           -r win-${{ env.Platform }} `
-          -p:PlatformTarget=${{ env.Platform }}
+          -p:PlatformTarget=${{ env.Platform }} `
+          -p:Version="${{ env.AppVersion }}" `
+          -p:FileVersion="${{ env.AppVersion }}" `
+          -p:AssemblyVersion="${{ env.AppVersion }}"
 
       - name: Upload binary artifacts
         uses: actions/upload-artifact@v3
         with:
           name: touch${{ env.Platform }}
-          retention-days: 1
-          path: ${{ github.workspace }}\app\release\${{ env.Platform }}\touch${{ env.Platform }}.exe
+          path: ${{ github.workspace }}\app\release\${{ env.Platform }}\touch-${{ env.Platform }}.exe
 
   purge:
     runs-on: ubuntu-latest

@@ -17,8 +17,8 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-        <AssemblyName Condition="'$(PlatformTarget)' == 'x64'">touch64</AssemblyName>
-        <AssemblyName Condition="'$(PlatformTarget)' == 'x86'">touch32</AssemblyName>
+        <AssemblyName Condition="'$(PlatformTarget)' == 'x64'">touch-x64</AssemblyName>
+        <AssemblyName Condition="'$(PlatformTarget)' == 'x86'">touch-x86</AssemblyName>
 
         <DebugType>none</DebugType>
         <PublishSingleFile>true</PublishSingleFile>
