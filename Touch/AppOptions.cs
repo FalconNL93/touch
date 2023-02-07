@@ -6,4 +6,5 @@ public class AppOptions
     public bool OpenFile { get; init; }
     public bool ChangeAccessTime { get; init; }
     public bool CreateFile { get; init; } = true;
+    public bool Verbose { get; init; }
 }

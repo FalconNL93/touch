@@ -43,7 +43,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: touch${{ env.Platform }}
-          path: ${{ github.workspace }}\app\release\${{ env.Platform }}\touch-${{ env.Platform }}.exe
+          path: ${{ github.workspace }}/app/release/${{ env.Platform }}/touch-${{ env.Platform }}.exe
 
   purge:
     runs-on: ubuntu-latest

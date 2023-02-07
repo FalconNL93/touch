@@ -35,6 +35,7 @@ public static class Program
             return;
         }
 
+        Verbose($"Updating file");
         try
         {
             File.SetLastAccessTime(AppOptions.FileName, DateTime.Now);
@@ -51,16 +52,19 @@ public static class Program
     {
         if (string.IsNullOrEmpty(AppOptions.FileName))
         {
+            Verbose("Invalid filename");
             return;
         }
 
+        Verbose($"File: {AppOptions.FileName}");
         try
         {
             if (!File.Exists(AppOptions.FileName) && AppOptions.CreateFile)
             {
+                Verbose("Creating file");
                 File.Create(AppOptions.FileName);
             }
-
+            
             UpdateTimes();
         }
         catch (Exception e)
@@ -78,6 +82,17 @@ public static class Program
         Console.WriteLine("-o       Open file after creating/updating with default editor");
         Console.WriteLine("-a       Change access/write time on file when file already exists");
         Console.WriteLine("-c       Do not create any files");
+        Console.WriteLine("-v       Verbose");
+    }
+
+    private static void Verbose(string message)
+    {
+        if (!AppOptions.Verbose)
+        {
+            return;
+        }
+        
+        Console.WriteLine(message);
     }
 
     private static void OpenFile()
